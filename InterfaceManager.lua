@@ -1,101 +1,4 @@
---[[local httpService = game:GetService("HttpService")
-
-local InterfaceManager = {} do
-	InterfaceManager.Folder = "FluentSettings"
-    InterfaceManager.Settings = {
-        Theme = "Dark",
-        Acrylic = true,
-        Transparency = true,
-        MenuKeybind = "LeftControl"
-    }
-
-    function InterfaceManager:SetFolder(folder)
-		self.Folder = folder;
-		self:BuildFolderTree()
-	end
-
-    function InterfaceManager:SetLibrary(library)
-		self.Library = library
-	end
-
-    function InterfaceManager:BuildFolderTree()
-		local paths = {}
-
-		local parts = self.Folder:split("/")
-		for idx = 1, #parts do
-			paths[#paths + 1] = table.concat(parts, "/", 1, idx)
-		end
-
-		table.insert(paths, self.Folder)
-		table.insert(paths, self.Folder .. "/settings")
-
-		for i = 1, #paths do
-			local str = paths[i]
-			if not isfolder(str) then
-				makefolder(str)
-			end
-		end
-	end
-
-    function InterfaceManager:SaveSettings()
-        writefile(self.Folder .. "/options.json", httpService:JSONEncode(InterfaceManager.Settings))
-    end
-
-    function InterfaceManager:LoadSettings()
-        local path = self.Folder .. "/options.json"
-        if isfile(path) then
-            local data = readfile(path)
-            local success, decoded = pcall(httpService.JSONDecode, httpService, data)
-
-            if success then
-                for i, v in next, decoded do
-                    InterfaceManager.Settings[i] = v
-                end
-            end
-        end
-    end
-
-    function InterfaceManager:BuildInterfaceSection(tab)
-        assert(self.Library, "Must set InterfaceManager.Library")
-		local Library = self.Library
-        local Settings = InterfaceManager.Settings
-
-        InterfaceManager:LoadSettings()
-
-		local section = tab:AddSection("Interface")
-
-		local InterfaceTheme = section:AddDropdown("InterfaceTheme", {
-			Title = "Theme",
-			Description = "Changes the interface theme.",
-			Values = Library.Themes,
-			Default = Settings.Theme,
-			Callback = function(Value)
-				Library:SetTheme(Value)
-                Settings.Theme = Value
-                InterfaceManager:SaveSettings()
-			end
-		})
-
-        InterfaceTheme:SetValue(Settings.Theme)
-	
-		if Library.UseAcrylic then
-			section:AddToggle("AcrylicToggle", {
-				Title = "Acrylic",
-				Description = "The blurred background requires graphic quality 8+",
-				Default = Settings.Acrylic,
-				Callback = function(Value)
-					Library:ToggleAcrylic(Value)
-                    Settings.Acrylic = Value
-                    InterfaceManager:SaveSettings()
-				end
-			})
-		end
-
-    end
-end
-
-return InterfaceManager
-]]
+--chi biet khoc
 game:GetService("StarterGui"):SetCore("SendNotification",{
 	Title = "Pear Cat Hub",
 	Text = "Loading Ui....",
@@ -225,58 +128,31 @@ function DCorrectTable(h)
     end
     return i
 end
-local j = game:GetService("HttpService")
-local k = "!CustomUI.json"
-function SaveCustomUISettings()
-    local j = game:GetService("HttpService")
+local SaveFileName = getgenv().SaveFileName or plr.Name.."_memaymup.json"
+
+function SaveSettings()
+    local HttpService = game:GetService("HttpService")
     if not isfolder("Pear Cat Hub") then
         makefolder("Pear Cat Hub")
     end
-    writefile("Pear Cat Hub/" .. k, j:JSONEncode(CorrectTable(e)))
+    writefile("Pear Cat Hub/" .. SaveFileName, HttpService:JSONEncode(Settings))
 end
-function ReadCustomUISetting()
-    local l, m =
-        pcall(
-        function()
-            local j = game:GetService("HttpService")
-            if not isfolder("Pear Cat Hub") then
-                makefolder("Pear Cat Hub")
-            end
-            local n = j:JSONDecode(readfile("Pear Cat Hub/" .. k))
-            for d, v in pairs(n) do
-                local function o()
-                    if v.Color == nil then
-                        return
-                    end
-                    if v.Rainbow == nil then
-                        return
-                    end
-                    if v.Breathing == nil then
-                        return
-                    end
-                    if v.Breathing.Color1 == nil then
-                        return
-                    end
-                    if v.Breathing.Color2 == nil then
-                        return
-                    end
-                    return true
-                end
-                if not o() then
-                    SaveCustomUISettings()
-                    return ReadCustomUISetting()
-                end
-            end
-            return n
+
+function ReadSetting() 
+    local s,e = pcall(function() 
+        local HttpService = game:GetService("HttpService")
+        if not isfolder("Pear Cat Hub") then
+            makefolder("Pear Cat Hub")
         end
-    )
-    if l then
-        return m
+        return HttpService:JSONDecode(readfile("Pear Cat Hub/" .. SaveFileName))
+    end)
+    if s then return e 
     else
-        SaveCustomUISettings()
-        return ReadCustomUISetting()
+        SaveSettings()
+        return ReadSetting()
     end
 end
+
 if not getgenv().Chon then 
     e = DCorrectTable(ReadCustomUISetting())
     for d, v in pairs(e) do
@@ -11740,9 +11616,9 @@ local LeviStatus = Section34.CreateLabel({Title = "Waiting For Fix and Upgrade S
 
         local Section38 = Page11.CreateSection("One Click / Kaitun / Cuttay")
 
-        Section36.CreateToggle({Title = "Start One Click [ Beta ] ", Desc = 'Cuttay Account Farm 🚫🤚: Aka 1 Click Auto Farm , Kaitan   Is a beta , not get more item thank for read ', Default = _G.Farmfast}, function(Value)
-            _G.Farmfast = (Value)
-            SaveCustomUISettings()
+        Section38.CreateToggle({Title = "Start One Click [ Beta ] ", Desc = 'Cuttay Account Farm 🚫🤚: Aka 1 Click Auto Farm , Kaitan   Is a beta , not get more item thank for read ', Default = _G.Farmfast}, function(Value)
+            _G.Farmfast = (value)
+            SaveSettings()
         end)
 
         spawn(
