@@ -1,4 +1,14 @@
---chi biet khoc
+--haha
+
+
+
+
+
+
+
+
+
+
 game:GetService("StarterGui"):SetCore("SendNotification",{
 	Title = "Pear Cat Hub",
 	Text = "Loading Ui....",
@@ -128,45 +138,42 @@ function DCorrectTable(h)
     end
     return i
 end
-local SaveFileName = getgenv().SaveFileName or plr.Name.."_memaymup.json"
+local HttpService = game:GetService("HttpService")
+local SaveCustomFileName = "!CustomUI.json"
+ 
 
-function SaveSettings()
+function SaveCustomUISettings()
     local HttpService = game:GetService("HttpService")
-    if not isfolder("Pear Cat Hub") then
-        makefolder("Pear Cat Hub")
+    if not isfolder("Pear Cat HUB") then
+        makefolder("Pear Cat HUB")
     end
-    writefile("Pear Cat Hub/" .. SaveFileName, HttpService:JSONEncode(Settings))
+    writefile("Pear Cat HUB/" .. SaveCustomFileName, HttpService:JSONEncode(CorrectTable(SettingsRac)))
 end
 
-function ReadSetting() 
+function ReadCustomUISetting() 
     local s,e = pcall(function() 
         local HttpService = game:GetService("HttpService")
-        if not isfolder("Pear Cat Hub") then
-            makefolder("Pear Cat Hub")
+        if not isfolder("Pear Cat HUB") then
+            makefolder("Pear Cat HUB")
         end
-        return HttpService:JSONDecode(readfile("Pear Cat Hub/" .. SaveFileName))
+        return HttpService:JSONDecode(readfile("Pear Cat HUB/" .. SaveCustomFileName))
     end)
     if s then return e 
     else
-        SaveSettings()
-        return ReadSetting()
+        SaveCustomUISettings()
+        return ReadCustomUISetting()
     end
 end
-
-if not getgenv().Chon then 
-    e = DCorrectTable(ReadCustomUISetting())
-    for d, v in pairs(e) do
-        b[d] = v.Color
-    end
+SettingsRac=DCorrectTable(ReadCustomUISetting())
+for k,v in pairs(SettingsRac) do 
+    IndexUIColor[k]=v.Color
 end
 if not getgenv().ractvkretarddumb then
-    spawn(
-        function()
-            while wait(1) do
-                SaveCustomUISettings()
-            end
+    spawn(function() 
+        while wait(1) do
+            SaveCustomUISettings()
         end
-    )
+    end)
     getgenv().ractvkretarddumb = true
 end
 getgenv().UIColor = b
@@ -11618,9 +11625,7 @@ local LeviStatus = Section34.CreateLabel({Title = "Waiting For Fix and Upgrade S
 
         Section38.CreateToggle({Title = "Start One Click [ Beta ] ", Desc = 'Cuttay Account Farm 🚫🤚: Aka 1 Click Auto Farm , Kaitan   Is a beta , not get more item thank for read ', Default = _G.Farmfast}, function(Value)
             _G.Farmfast = (value)
-            SaveSettings()
         end)
-
         spawn(
     function()
         pcall(
