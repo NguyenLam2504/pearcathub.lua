@@ -1,11 +1,8 @@
-local plrs = game.Players
-local lp = plrs.LocalPlayer
-
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
 local LocalPlayer = game:GetService("Players").LocalPlayer
 local Mouse = LocalPlayer:GetMouse()
-local CoreGui = lp.PlayerGui
+local CoreGui = game:GetService("CoreGui")
 local function MakeDraggable(topbarobject, object)
 	local function CustomPos(topbarobject, object)
 		local Dragging = nil
